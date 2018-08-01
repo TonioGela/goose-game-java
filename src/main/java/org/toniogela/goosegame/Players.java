@@ -100,8 +100,8 @@ public class Players {
           + " bounces! " + playerName + " returns to " + actualPosition + ".");
       return actualPosition;
     }
-    builder.append(playerName + " moves from " + (oldPosition == 1 ? "Start" : oldPosition) + " to "
-        + newPosition + ".");
+    builder.append(playerName + " moves from "
+        + (oldPosition == 1 ? "Start" : Integer.valueOf(oldPosition)) + " to " + newPosition + ".");
     return newPosition;
   }
 
