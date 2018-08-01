@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,7 @@ public class Players {
       int offset = diceOne + diceTwo;
       int newPosition = checkPosition(builder, playerName, position, offset);
       positions.put(playerName, Integer.valueOf(newPosition));
+      prank(builder, playerName, position, newPosition);
       if (newPosition == 63) {
         Game.setWinner(playerName);
       }
@@ -46,7 +48,7 @@ public class Players {
   private int checkPosition(StringBuilder builder, String playerName, int position, int offset) {
 
     if ((position + offset) == 6) {
-      builder.append(playerName + " moves form " + position + " to The Bridge. " + playerName
+      builder.append(playerName + " moves from " + position + " to The Bridge. " + playerName
           + " jumps to 12");
       return 12;
     }
@@ -60,31 +62,29 @@ public class Players {
 
     List<Integer> gooseSteps = new ArrayList<>(6);
 
+    // calculate goose steps
     int newPosition = position + offset;
     while (gooses.contains(Integer.valueOf(newPosition))) {
       gooseSteps.add(Integer.valueOf(newPosition));
       newPosition += offset;
     }
 
-    /**
-     * Pippo moves from 10 to 14, The Goose. Pippo moves again and goes to 18, The Goose. Pippo
-     * moves again and goes to 22
-     */
-
     if (!gooseSteps.isEmpty()) {
+      // First Goose Step
       builder.append(
           playerName + " moves from " + position + " to " + gooseSteps.get(0) + ", The Goose. ");
 
+      // Center GooseSteps
       if (gooseSteps.size() > 1) {
         for (int i = 1; i < gooseSteps.size(); i++) {
           builder.append(
               playerName + " moves again and goes to " + gooseSteps.get(i) + ", The Goose. ");
         }
       }
+
+      // Last Step
       int lastPosition = gooseSteps.get(gooseSteps.size() - 1).intValue() + offset;
-
       builder.append(playerName + " moves again and goes to " + lastPosition + ".");
-
       return lastPosition;
     }
     newPosition = checkForBounce(builder, playerName, position, position + offset);
@@ -96,12 +96,26 @@ public class Players {
       int newPosition) {
     if (newPosition > 63) {
       int actualPosition = 2 * 63 - newPosition;
-      builder.append(playerName + " moves form " + oldPosition + " to 63. " + playerName
-          + " bounces! " + playerName + " returns to " + actualPosition);
+      builder.append(playerName + " moves from " + oldPosition + " to 63. " + playerName
+          + " bounces! " + playerName + " returns to " + actualPosition + ".");
       return actualPosition;
     }
-    builder.append(" " + playerName + " moves form " + oldPosition + " to " + newPosition);
+    builder.append(playerName + " moves from " + (oldPosition == 1 ? "Start" : oldPosition) + " to "
+        + newPosition + ".");
     return newPosition;
+  }
+
+  private void prank(StringBuilder builder, String playerName, int position, int newPosition) {
+    for (Map.Entry<String, Integer> entry : positions.entrySet()) {
+      if (!entry.getKey().equals(playerName) && entry.getValue().intValue() == newPosition) {
+        entry.setValue(Integer.valueOf(position));
+        builder.append(" On " + newPosition + " there is " + entry.getKey() + ", who returns on "
+            + position + ".");
+        break;
+      }
+    }
+
+
   }
 
   public void movePlayer(String playerName) {
