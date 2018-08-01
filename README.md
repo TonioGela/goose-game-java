@@ -13,6 +13,8 @@ You have the ability to prank other players: when you step in a cell populated b
 
 Enjoy!
 
+![Gameplay example](http://toniogela.org/Usage.gif)
+
 ## Installing instuctions
 
 The game requires `java 8+` and [maven](https://maven.apache.org/download.cgi) to be built and run.
