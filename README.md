@@ -1,5 +1,4 @@
-###The Goose Game
----
+# The Goose Game
 This project was developed as a response to an hiring interview.
 
 This is an interactive console game whose aim is to move a player from the cell 1 to cell 63. 
@@ -14,9 +13,7 @@ You have the ability to prank other players: when you step in a cell populated b
 
 Enjoy!
 
----
-
-###Installing instuctions
+## Installing instuctions
 
 The game requires `java 8+` and [maven](https://maven.apache.org/download.cgi) to be built and run.
 
