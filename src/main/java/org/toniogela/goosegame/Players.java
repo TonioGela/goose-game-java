@@ -76,16 +76,16 @@ public class Players {
           playerName + " moves from " + position + " to " + gooseSteps.get(0) + ", The Goose. ");
 
       if (gooseSteps.size() > 1) {
-        for (int i = 1; i < gooseSteps.size() - 1; i++) {
+        for (int i = 1; i < gooseSteps.size(); i++) {
           builder.append(
-              playerName + " moves again and goes to " + gooseSteps.get(i) + ", The Goose.");
+              playerName + " moves again and goes to " + gooseSteps.get(i) + ", The Goose. ");
         }
       }
+      int lastPosition = gooseSteps.get(gooseSteps.size() - 1).intValue() + offset;
 
-      builder.append(
-          playerName + " moves again and goes to " + gooseSteps.get(gooseSteps.size() - 1) + ".");
+      builder.append(playerName + " moves again and goes to " + lastPosition + ".");
 
-      return gooseSteps.get(gooseSteps.size() - 1).intValue();
+      return lastPosition;
     }
     newPosition = checkForBounce(builder, playerName, position, position + offset);
     return newPosition;
