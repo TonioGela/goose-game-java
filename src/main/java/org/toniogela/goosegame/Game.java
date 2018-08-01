@@ -6,16 +6,20 @@ public class Game {
 
   private static Console console = System.console();
   private Players players;
-  private String winner;
+  private static String winner;
 
   public void start() {
     players = new Players();
     println("Welcome to the Goose Game!");
     printInstructions();
-    while (winner == null) {
+    do {
       parseCommand(console.readLine());
-    }
+    } while (winner == null);
     println(winner + " Wins!!");
+  }
+
+  public static void setWinner(String playerName) {
+    winner = playerName;
   }
 
   private void parseCommand(String command) {
@@ -58,7 +62,7 @@ public class Game {
       case 4:
         parseSteps(args[1], args[2] + args[3]);
         break;
-        
+
       default:
         println("This should never had happened");
         break;

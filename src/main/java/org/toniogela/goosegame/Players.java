@@ -32,9 +32,11 @@ public class Players {
     if (positions.containsKey(playerName)) {
       int position = positions.get(playerName).intValue();
       int offset = diceOne + diceTwo;
-
-
+      int newPosition = checkPosition(builder, playerName, position, offset);
       positions.put(playerName, Integer.valueOf(newPosition));
+      if (newPosition == 63) {
+        Game.setWinner(playerName);
+      }
       println(builder.toString());
     } else {
       println("Unexisting player!");
@@ -48,34 +50,45 @@ public class Players {
           + " jumps to 12");
       return 12;
     }
-
-    int newPosition = position + offset;
-
-    // AGGIUNGI QUI IL CONTROLLO GOOSE
-
-    newPosition = checkForBounce(builder, playerName, position, newPosition);
-
+    return gooseSteps(builder, playerName, position, offset);
   }
 
 
-  private int gooseSteps(int position, int offset) {
-    List<Integer> gooses = Arrays.asList(5, 9, 14, 18, 23, 27);
+  private int gooseSteps(StringBuilder builder, String playerName, int position, int offset) {
+    List<Integer> gooses = Arrays.asList(Integer.valueOf(5), Integer.valueOf(9),
+        Integer.valueOf(14), Integer.valueOf(18), Integer.valueOf(23), Integer.valueOf(27));
 
     List<Integer> gooseSteps = new ArrayList<>(6);
-    
+
     int newPosition = position + offset;
-    while (gooses.contains(newPosition)) {
-      gooseSteps.add(newPosition);
+    while (gooses.contains(Integer.valueOf(newPosition))) {
+      gooseSteps.add(Integer.valueOf(newPosition));
       newPosition += offset;
     }
-    
+
+    /**
+     * Pippo moves from 10 to 14, The Goose. Pippo moves again and goes to 18, The Goose. Pippo
+     * moves again and goes to 22
+     */
+
     if (!gooseSteps.isEmpty()) {
-      //SCANNA LA LISTA E LOGGA PIU PASSI
-      
-    } else {
-      //LOGGA 1 PASSO
-      return newPosition;
+      builder.append(
+          playerName + " moves from " + position + " to " + gooseSteps.get(0) + ", The Goose. ");
+
+      if (gooseSteps.size() > 1) {
+        for (int i = 1; i < gooseSteps.size() - 1; i++) {
+          builder.append(
+              playerName + " moves again and goes to " + gooseSteps.get(i) + ", The Goose.");
+        }
+      }
+
+      builder.append(
+          playerName + " moves again and goes to " + gooseSteps.get(gooseSteps.size() - 1) + ".");
+
+      return gooseSteps.get(gooseSteps.size() - 1).intValue();
     }
+    newPosition = checkForBounce(builder, playerName, position, position + offset);
+    return newPosition;
   }
 
 
@@ -84,20 +97,10 @@ public class Players {
     if (newPosition > 63) {
       int actualPosition = 2 * 63 - newPosition;
       builder.append(playerName + " moves form " + oldPosition + " to 63. " + playerName
-          + " bounces! " + playerName + " return to " + actualPosition);
+          + " bounces! " + playerName + " returns to " + actualPosition);
       return actualPosition;
     }
     builder.append(" " + playerName + " moves form " + oldPosition + " to " + newPosition);
-    return newPosition;
-  }
-
-  private int checkForBridge(StringBuilder builder, String playerName, int oldPosition,
-      int newPosition) {
-    if (newPosition == 6) {
-      builder.append(playerName + " moves form " + oldPosition + " to The Bridge. " + playerName
-          + " jumps to 12");
-      return 12;
-    }
     return newPosition;
   }
 
