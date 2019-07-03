@@ -13,7 +13,7 @@ You have the ability to prank other players: when you step in a cell populated b
 
 Enjoy!
 
-![Gameplay example](http://toniogela.org/Usage.gif)
+![Gameplay example](/Usage.gif)
 
 ## Installing instuctions
 
